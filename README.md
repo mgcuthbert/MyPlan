@@ -27,6 +27,12 @@ The calendar view is one of the best kind of views for the training plan, howeve
 #### Future Plans ++
 The other option would be to update Github with some basic information about the activity. However that would require some interesting workarounds to get that working properly.
 
+## Github Training Plan
+Training plans need to be built in a specific way and stored in public Github repo. The file needs to a CSV file with the following format:
+ID, DATE (MM/DD/YYYY), EXPECTED_MILES, EXPECTED_PACE, TRAINING_NAME, TRAINING_DESCRIPTION
+
+Once the file is saved, you can click on the "Raw" button to get the raw file. Copy the URL from the address bar and put it in the settings of the Chrome Extension. 
+
 ## Build and Run
 ```js
  git clone https://github.com/mgcuthbert/StravaTrainingPlan.git
