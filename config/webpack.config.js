@@ -10,7 +10,8 @@ const config = (env, argv) =>
     merge(common, {
         entry: {
             popup: PATHS.src + '/popup/popup.ts',
-            stravaTrainingPlan: PATHS.src + '/StravaTrainingPlan.ts'
+            stravaTrainingPlan: PATHS.src + '/stravaTrainingPlan.ts',
+            githubFetcher: PATHS.src + '/githubFetcher.ts'
         },
         devtool: argv.mode === 'production' ? false : 'source-map',
     });

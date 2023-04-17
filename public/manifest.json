@@ -13,8 +13,12 @@
         "js": ["stravaTrainingPlan.js"],
         "matches": ["https://*.strava.com/*"]
     }],
+    "background": {
+        "service_worker": "githubFetcher.js",
+        "type": "module"
+    },
     "permissions": [
-        "storage",
-        "tabs"
-    ]
+        "storage"
+    ],
+    "host_permissions": ["https://github.com/*"]
 }

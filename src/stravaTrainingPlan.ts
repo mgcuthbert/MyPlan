@@ -1,4 +1,15 @@
-const updateDom = (): void => {
+const updateDom = async (): Promise<void> => {
+    const headingDiv = document.getElementById('heading');
+    if (headingDiv != null) {
+        chrome.runtime.sendMessage("TestTrainingPlan", handleResponse);
+    } else {
+        console.log("Heading Not Found, training plan could not be integrated!");
+    }
+};
+
+function handleResponse(data:string) {
+    console.log(data);
+
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
         const childHeadingDiv:ChildNode = headingDiv.childNodes[3];
@@ -8,6 +19,7 @@ const updateDom = (): void => {
         newDiv.innerHTML = `<div class="no-margins row">
             <header style="display: block;" class="inset">
                 <b>TRAINING PLAN:</b>
+                ${data}
             </header>
             <div class="inset">
                 <ul class="inline-stats section spans12">
@@ -37,9 +49,7 @@ const updateDom = (): void => {
         `;
 
         childHeadingDiv.appendChild(newDiv);
-    } else {
-        console.log("Heading Not Found, training plan could not be integrated!");
     }
-};
+}
 
 updateDom();
