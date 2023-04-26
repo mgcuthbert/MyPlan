@@ -11,7 +11,7 @@ chrome.storage.local.get('planURL', (result) => {
 planURL?.addEventListener('change', () => {
   chrome.storage.local.set({
     planURL: planURL.value,
-  })
+  });
 });
 
 const miRadio = document.getElementById('mi') as HTMLInputElement;
@@ -33,11 +33,11 @@ kmRadio.addEventListener('change', () => setMeasurementStorage());
 
 function setMeasurementStorage() {
   if (miRadio.checked) {
-    chrome.storage.local.set({useMi: true});
+    chrome.storage.local.set({ useMi: true });
   } else {
-    chrome.storage.local.set({useMi: false});
+    chrome.storage.local.set({ useMi: false });
   }
-};
+}
 
 // update UI when storage changes
 chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -50,4 +50,4 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       miRadio.checked = false;
     }
   }
-})
+});

@@ -33,6 +33,18 @@ ID, DATE (MM/DD/YYYY), EXPECTED_MILES, EXPECTED_PACE, TRAINING_NAME, TRAINING_DE
 
 Once the file is saved, you can click on the "Raw" button to get the raw file. Copy the URL from the address bar and put it in the settings of the Chrome Extension. 
 
+## TODO
+- Create library file to manage the CSV Plan, with functions that will pull data from specific dates.
+- Populate the training plan fields in the activity page
+- For premium users add training dots to the training log.
+- Add training column in the 'My Activities Page'
+- Add a popup in the 'My Activities Page' to show a calendar for your entire training plan with the current activities included.
+- Allow users to only include training plan for specific activities, make option available in the extension options.
+    - See below for location, but will include the type after the name of the individual in the same location.
+- Only include training plan on my runs, by allowing user to add strava id to options. 
+    - id: heading -> header -> h2 -> span -> a -> link in A contains the athlete ID
+
+
 ## Build and Run
 ```js
  git clone https://github.com/mgcuthbert/StravaTrainingPlan.git
