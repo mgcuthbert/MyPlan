@@ -9,7 +9,7 @@ const PATHS = require('./paths');
 const config = (env, argv) =>
     merge(common, {
         entry: {
-            popup: PATHS.src + '/popup/popup.ts',
+            options: PATHS.src + '/options/options.ts',
             stravaTrainingPlan: PATHS.src + '/stravaTrainingPlan.ts',
             githubFetcher: PATHS.src + '/githubFetcher.ts'
         },

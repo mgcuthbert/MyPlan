@@ -8,8 +8,13 @@ const updateDom = async (): Promise<void> => {
 };
 
 function handleResponse(data:string) {
-    console.log(data);
+    let storedData = chrome.storage.local.get(["plan"]).then((result) => {
+        buildPlan(result.plan);
+    });
+}
 
+function buildPlan(data:string) {
+    console.log(data);
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
         const childHeadingDiv:ChildNode = headingDiv.childNodes[3];
@@ -50,6 +55,6 @@ function handleResponse(data:string) {
 
         childHeadingDiv.appendChild(newDiv);
     }
-}
+} 
 
 updateDom();

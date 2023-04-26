@@ -1,5 +1,5 @@
 {
-    "name": "Strava Training Plan",
+    "name": "StravaTrainingPlan",
     "version": "0.1.0",
     "description": "Customization of Strava to include training plan.",
     "private": true,
