@@ -3,7 +3,7 @@ function log(text: any) {
   if (debugDiv) {
     debugDiv.innerText = text;
   }
-};
+}
 
 // PLAN URL
 const planURL = document.getElementById('planURL') as HTMLInputElement;
@@ -28,14 +28,14 @@ miRadio.addEventListener('change', () => saveOptions());
 const kmRadio = document.getElementById('km') as HTMLInputElement;
 kmRadio.addEventListener('change', () => saveOptions());
 
-function getActivityList() : string[] {
+function getActivityList(): string[] {
   let setList: string[] = [];
   inputMap.forEach((value, key) => {
     if (value.checked) {
       setList.push(key);
     }
   });
-  return setList; 
+  return setList;
 }
 
 function saveOptions() {
@@ -44,11 +44,11 @@ function saveOptions() {
     planURL: planURL.value,
     activityTypes: getActivityList(),
     useMi: miRadio.checked,
-  }
-  chrome.storage.local.set({planOptions: currentOptions});
-};
+  };
+  chrome.storage.local.set({ planOptions: currentOptions });
+}
 
-chrome.storage.local.get('planOptions').then(options => {
+chrome.storage.local.get('planOptions').then((options) => {
   const currentOptions = options.planOptions;
   if (currentOptions) {
     if (currentOptions.planURL) {
