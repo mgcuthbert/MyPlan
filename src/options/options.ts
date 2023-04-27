@@ -3,94 +3,80 @@ function log(text: any) {
   if (debugDiv) {
     debugDiv.innerText = text;
   }
-}
+};
 
 // PLAN URL
 const planURL = document.getElementById('planURL') as HTMLInputElement;
-chrome.storage.local.get('planURL', (result) => {
-  const value = result.planURL;
-  if (planURL && value) {
-    planURL.value = value;
-  }
-});
-
-planURL?.addEventListener('change', () => {
-  chrome.storage.local.set({
-    planURL: planURL.value,
-  });
-});
+planURL?.addEventListener('change', () => saveOptions());
 
 // ATHLETE ID
 const athleteId = document.getElementById('athleteId') as HTMLInputElement;
-chrome.storage.local.get('athleteId', (result) => {
-  const value = result.athleteId;
-  if (athleteId && value) {
-    athleteId.value = value;
-  }
-});
+athleteId?.addEventListener('change', () => saveOptions());
 
-athleteId?.addEventListener('change', () => {
-  chrome.storage.local.set({
-    athleteId: athleteId.value,
-  });
-});
-
-// ACTIVITY TYPE
+// ACTIVITY TYPES
 const activityList = ['run', 'ride', 'walk', 'workout', 'hike', 'swim'];
 const inputMap = new Map<string, HTMLInputElement>();
 activityList.forEach((type) => {
   const typeInput = document.getElementById(type) as HTMLInputElement;
-  typeInput?.addEventListener('change', () => updateActivityType());
+  typeInput?.addEventListener('change', () => saveOptions());
   inputMap.set(type, typeInput);
 });
 
-chrome.storage.local.get('activityTypes', (result) => {
-  let currentActivityTypes = ['run'];
-  if (!result || !result.activityType) {
-    currentActivityTypes = result.activityTypes;
-  }
+// MEASUREMENTS
+const miRadio = document.getElementById('mi') as HTMLInputElement;
+miRadio.addEventListener('change', () => saveOptions());
+const kmRadio = document.getElementById('km') as HTMLInputElement;
+kmRadio.addEventListener('change', () => saveOptions());
 
-  if (currentActivityTypes.length == 0) {
-    currentActivityTypes = ['run'];
-  }
-  currentActivityTypes.forEach((type) => {
-    var typeInput = inputMap.get(type);
-    if (typeInput) {
-      typeInput.checked = true;
-    }
-  });
-});
-
-function updateActivityType() {
+function getActivityList() : string[] {
   let setList: string[] = [];
   inputMap.forEach((value, key) => {
     if (value.checked) {
       setList.push(key);
     }
   });
-  chrome.storage.local.set({ activityTypes: setList });
+  return setList; 
 }
 
-// MEASUREMENTS
-const miRadio = document.getElementById('mi') as HTMLInputElement;
-miRadio.addEventListener('change', () => setMeasurementStorage());
-const kmRadio = document.getElementById('km') as HTMLInputElement;
-kmRadio.addEventListener('change', () => setMeasurementStorage());
+function saveOptions() {
+  const currentOptions = {
+    athleteId: Number(athleteId.value),
+    planURL: planURL.value,
+    activityTypes: getActivityList(),
+    useMi: miRadio.checked,
+  }
+  chrome.storage.local.set({planOptions: currentOptions});
+};
 
-chrome.storage.local.get('useMi', (result) => {
-  if (result.useMi) {
-    miRadio.checked = true;
-    kmRadio.checked = false;
-  } else {
-    kmRadio.checked = true;
-    miRadio.checked = false;
+chrome.storage.local.get('planOptions').then(options => {
+  const currentOptions = options.planOptions;
+  if (currentOptions) {
+    if (currentOptions.planURL) {
+      planURL.value = currentOptions.planURL;
+    }
+
+    if (currentOptions.athleteId && currentOptions.athleteId !== 0) {
+      athleteId.value = currentOptions.athleteId;
+    }
+
+    if (currentOptions.useMi) {
+      miRadio.checked = true;
+    } else {
+      kmRadio.checked = true;
+    }
+
+    let currentActivityTypes = ['run'];
+    if (currentOptions.activityTypes) {
+      currentActivityTypes = currentOptions.activityTypes;
+    }
+    if (currentActivityTypes.length === 0) {
+      currentActivityTypes = ['run'];
+    }
+    currentActivityTypes.forEach((type) => {
+      var typeInput = inputMap.get(type);
+      if (typeInput) {
+        typeInput.checked = true;
+      }
+    });
   }
 });
-
-function setMeasurementStorage() {
-  if (miRadio.checked) {
-    chrome.storage.local.set({ useMi: true });
-  } else {
-    chrome.storage.local.set({ useMi: false });
-  }
-}

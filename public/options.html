@@ -34,6 +34,11 @@
         height: 20px;
       }
 
+      input[type='number'] {
+        width: 100%;
+        height: 20px;
+      }
+
       input[type='checkbox'] {
         width: 15px;
         height: 15px;
@@ -64,7 +69,7 @@
 
       <div>
         <input id="planURL" type="text" placeholder="Training Plan URL Link" />
-        <input id="athleteId" type="text" placeholder="Athlete Id. Eg. 12345678" />
+        <input id="athleteId" type="number" placeholder="Athlete Id. Eg. 12345678" />
       </div>
     </fieldset>
     <fieldset>
@@ -113,5 +118,6 @@
     <div id="debug"></div>
 
     <script src="options.js"></script>
+    <script src="optionsStorageHandler.js"></script>
   </body>
 </html>
