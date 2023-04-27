@@ -1,3 +1,7 @@
+function managePlanData(planData:string): any {
+    console.log(planData);    
+}
+
 const updateDom = async (): Promise<void> => {
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
@@ -7,10 +11,11 @@ const updateDom = async (): Promise<void> => {
     }
 };
 
-function handleResponse(data:string) {
-    chrome.storage.local.get(["planOptions"]).then((result) => {
-        chrome.storage.local.get(["plan"]).then((planData) => {
-            buildPlan(planData.plan, result.planOptions);
+function handleResponse(status:string) {
+    console.log(status);
+    chrome.storage.local.get(["planOptions"]).then((options) => {
+        chrome.storage.local.get(["trainingPlan"]).then((planData) => {
+            buildPlan(planData.trainingPlan, options.planOptions);
         });
     });
 };
@@ -26,9 +31,8 @@ function buildPlan(planData:string, options:any) {
             activityType = "run";
         }
 
-        console.log(activityType.toLowerCase() + " - " + options.activityTypes);
-
         if (options.athleteId === Number(athleteId) && (options.activityTypes as string[]).indexOf(activityType.toLowerCase()) > -1) {
+            managePlanData(planData);
             const childHeadingDiv:ChildNode = headingDiv.childNodes[3];
             // PARENT DIV
             const newDiv:HTMLDivElement = document.createElement('div');
