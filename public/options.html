@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Options - JSON Formatter</title>
+    <title>Options - Training Plan</title>
     <style>
       body {
         margin: 18px;
@@ -18,13 +18,30 @@
       legend {
         font-weight: 600;
         padding: 0 5px;
+        padding-bottom: 10px;
       }
 
       label {
-        display: flex;
+        display: block;
+        padding-left: 15px;
+        text-indent: -15px;
         gap: 10px;
-        align-items: center;
         height: 24px;
+      }
+
+      input[type='text'] {
+        width: 100%;
+        height: 20px;
+      }
+
+      input[type='checkbox'] {
+        width: 15px;
+        height: 15px;
+        padding: 0;
+        margin: 0;
+        vertical-align: bottom;
+        position: relative;
+        top: -1px;
       }
 
       label > input {
@@ -45,8 +62,38 @@
     <fieldset>
       <legend>Training Plan</legend>
 
-      <div width="100%">
-        <input id="planURL" type="text" name="planLocation" placeholder="Training Plan URL Link" width="100%" />
+      <div>
+        <input id="planURL" type="text" placeholder="Training Plan URL Link" />
+        <input id="athleteId" type="text" placeholder="Athlete Id. Eg. 12345678" />
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Select workout types</legend>
+      <div>
+        <label>
+          <input type="checkbox" id="run" name="run" value="run" />
+          Run
+        </label>
+        <label>
+          <input type="checkbox" id="ride" name="ride" value="ride" />
+          Ride
+        </label>
+        <label>
+          <input type="checkbox" id="workout" name="workout" value="workout" />
+          Workout
+        </label>
+        <label>
+          <input type="checkbox" id="walk" name="walk" value="walk" />
+          Walk
+        </label>
+        <label>
+          <input type="checkbox" id="swim" name="swim" value="swim" />
+          Swim
+        </label>
+        <label>
+          <input type="checkbox" id="hike" name="hike" value="hike" />
+          Hike
+        </label>
       </div>
     </fieldset>
     <fieldset>
@@ -62,6 +109,8 @@
         </label>
       </div>
     </fieldset>
+
+    <div id="debug"></div>
 
     <script src="options.js"></script>
   </body>
