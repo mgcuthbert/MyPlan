@@ -1,4 +1,4 @@
-const PLAN_NAME = "TestTrainingPlan2";
+const PLAN_NAME = "TestTrainingPlan3";
 
 function getPageTime(headingDiv: HTMLElement): Date {
     const timeElement = headingDiv.querySelector("div div.row div.spans8 div.details-container div.details time") as HTMLTimeElement;
@@ -22,17 +22,14 @@ function getPageActivityType(headingDiv: HTMLElement): String {
     return activityType;
 }
 
-function getStorageKey(headingDiv: HTMLElement) {
-    return PLAN_NAME + "-" + getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv).toLowerCase()
+function getIndividualStorageKey(headingDiv: HTMLElement) {
+    return getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv).toLowerCase()
 }
 
 const updateDom = async (): Promise<void> => {
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
-        const storageKey = getStorageKey(headingDiv);
-        console.log(storageKey);
-        chrome.storage.local.get([storageKey], (planData) => {
-            console.log(planData);
+        chrome.storage.local.get([PLAN_NAME], (planData) => {
             if (planData && planData.length > 0) {
                 handleResponse("Retrieved from cache!");
             } else {
@@ -49,8 +46,9 @@ function handleResponse(status:string) {
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
         chrome.storage.local.get(["planOptions"], (options) => {
-            const storageKey = getStorageKey(headingDiv);
-            chrome.storage.local.get([storageKey], (planData) => {
+            console.log(options);
+            chrome.storage.local.get([PLAN_NAME], (planData) => {
+                console.log(planData);
                 if (planData && planData.length > 0) {
                     buildPlan(options.planOptions, planData);
                 }
