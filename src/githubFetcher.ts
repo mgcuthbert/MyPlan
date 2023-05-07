@@ -1,9 +1,8 @@
 chrome.runtime.onMessage.addListener((planName, sender, sendResponse) => {
     console.log("Received message for " + planName);
-    chrome.storage.local.get(["planOptions"]).then((options) => {
-        console.log(options.planOptions);
+    chrome.storage.local.get(["planOptions"], (options) => {
         if (options.planOptions.planURL && options.planOptions.planURL.length > 0) {
-            chrome.storage.local.get(["trainingPlan"]).then((currentPlan) => {
+            chrome.storage.local.get(["trainingPlan"], (currentPlan) => {
                 if (currentPlan && currentPlan.url === options.planOptions.planURL && Date.now() - currentPlan.tombstone < 86400000) {
                     console.log("Using plan from cache.");
                     sendResponse("Using current plan from cache. URL: " + options.planOptions.planURL);
@@ -25,20 +24,6 @@ chrome.runtime.onMessage.addListener((planName, sender, sendResponse) => {
     });
 });
 
-interface PlanEntity {
-    id: Number;
-    date: Date;
-    type: string;
-    distance: Number;
-    paceMinutes: Number;
-    paceSeconds: Number;
-    hours: Number;
-    minutes: Number;
-    seconds: Number;
-    title: string;
-    description: string;
-}
-
 function updateLocalStorageWithPlan(planName:string, data:any): Promise<any[]> {
     // take the data and store it in the cache with the key "PLAN"-DATE-ACTIVITY.
     // first split each on each line in the plan, then loop through each line in 
@@ -46,8 +31,7 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<any[]> {
     const promises = data.split(/\r?\n/).filter((element:string) => element.length > 0)
             .map((element:string) => {
         const planElements = element.split(",");
-        const dateElements = planElements[1].split("-");
-        const entityDate = Date.UTC(Number(dateElements[0]), Number(dateElements[1]), Number(dateElements[2]));
+        const entityDate = new Date(planElements[1] + "T00:00:00Z");
         const entityType = planElements[2];
         const distance = Number(planElements[3]);
         const pace = planElements[4].split(":");
@@ -57,8 +41,8 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<any[]> {
         const totalSeconds = distance * paceSeconds;
         const addedMinutes = Math.trunc(totalSeconds / 60);
         const finalHours = Math.trunc((totalMinutes + addedMinutes) / 60);
-        const finalMinutes = (totalMinutes + addedMinutes) % 60;
-        const finalSeconds = totalSeconds % 60;
+        const finalMinutes = Math.trunc((totalMinutes + addedMinutes) % 60);
+        const finalSeconds = Math.trunc(totalSeconds % 60);
         const newEntity = {
             id: planElements[0],
             date: entityDate,
@@ -72,9 +56,9 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<any[]> {
             title: planElements[5],
             description: planElements[6]
         }
-        console.log(entityDate);
-        const storageKey = planName + '-' + entityDate + '-' + entityType.toLowerCase();
+        const storageKey = planName + '-' + entityDate.getTime() + '-' + entityType.toLowerCase();
         console.log(storageKey);
+        console.log(newEntity);
         return chrome.storage.local.set({storageKey: { newEntity }});
     });;
 

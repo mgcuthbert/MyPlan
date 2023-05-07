@@ -3,8 +3,8 @@ const PLAN_NAME = "TestTrainingPlan2";
 function getPageTime(headingDiv: HTMLElement): Date {
     const timeElement = headingDiv.querySelector("div div.row div.spans8 div.details-container div.details time") as HTMLTimeElement;
     const timeValues = timeElement.textContent!.split(",");
-    const activityTime = new Date(timeValues[1] + timeValues[2]);
-    console.log(activityTime.getTime());
+    const monthDayValues = timeValues[1].trim().split(" ");
+    const activityTime = new Date(timeValues[2].trim() + "-" + monthDayValues[1] + "-" + monthDayValues[0].toLowerCase() + "T00:00:00Z");
     return activityTime;
 }
 
@@ -23,14 +23,16 @@ function getPageActivityType(headingDiv: HTMLElement): String {
 }
 
 function getStorageKey(headingDiv: HTMLElement) {
-    return PLAN_NAME + getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv).toLowerCase()
+    return PLAN_NAME + "-" + getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv).toLowerCase()
 }
 
 const updateDom = async (): Promise<void> => {
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
         const storageKey = getStorageKey(headingDiv);
-        chrome.storage.local.get([storageKey]).then((planData) => {
+        console.log(storageKey);
+        chrome.storage.local.get([storageKey], (planData) => {
+            console.log(planData);
             if (planData && planData.length > 0) {
                 handleResponse("Retrieved from cache!");
             } else {
@@ -46,9 +48,9 @@ function handleResponse(status:string) {
     console.log(status);
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
-        chrome.storage.local.get(["planOptions"]).then((options) => {
+        chrome.storage.local.get(["planOptions"], (options) => {
             const storageKey = getStorageKey(headingDiv);
-            chrome.storage.local.get([storageKey]).then((planData) => {
+            chrome.storage.local.get([storageKey], (planData) => {
                 if (planData && planData.length > 0) {
                     buildPlan(options.planOptions, planData);
                 }
