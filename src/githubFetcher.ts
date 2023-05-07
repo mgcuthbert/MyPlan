@@ -43,9 +43,11 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<any[]> {
     // take the data and store it in the cache with the key "PLAN"-DATE-ACTIVITY.
     // first split each on each line in the plan, then loop through each line in 
     // the plan, split by comma and create the plan entity object
-    const promises = data.split(/\r?\n/).array.map((element:string) => {
+    const promises = data.split(/\r?\n/).filter((element:string) => element.length > 0)
+            .map((element:string) => {
         const planElements = element.split(",");
-        const entityDate = new Date(planElements[1]);
+        const dateElements = planElements[1].split("-");
+        const entityDate = Date.UTC(Number(dateElements[0]), Number(dateElements[1]), Number(dateElements[2]));
         const entityType = planElements[2];
         const distance = Number(planElements[3]);
         const pace = planElements[4].split(":");
@@ -70,8 +72,10 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<any[]> {
             title: planElements[5],
             description: planElements[6]
         }
-        const storageKey = planName + '-' + entityDate.getTime() + '-' + entityType;
-        chrome.storage.local.set({storageKey: { newEntity }});
+        console.log(entityDate);
+        const storageKey = planName + '-' + entityDate + '-' + entityType.toLowerCase();
+        console.log(storageKey);
+        return chrome.storage.local.set({storageKey: { newEntity }});
     });;
 
     return Promise.all(promises);
