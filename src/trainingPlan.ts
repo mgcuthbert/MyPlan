@@ -1,10 +1,7 @@
-function managePlanData(planData:string): any {
-    console.log(planData);    
-}
-
 const updateDom = async (): Promise<void> => {
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
+        // todo check the cache first and see if we can just grab it directly from the cache first
         chrome.runtime.sendMessage("TestTrainingPlan", handleResponse);
     } else {
         console.log("Heading Not Found, training plan could not be integrated!");
@@ -14,13 +11,11 @@ const updateDom = async (): Promise<void> => {
 function handleResponse(status:string) {
     console.log(status);
     chrome.storage.local.get(["planOptions"]).then((options) => {
-        chrome.storage.local.get(["trainingPlan"]).then((planData) => {
-            buildPlan(planData.trainingPlan, options.planOptions);
-        });
+        buildPlan(options.planOptions);
     });
 };
 
-function buildPlan(planData:string, options:any) {
+function buildPlan(options:any) {
     const headingDiv = document.getElementById('heading');
     if (headingDiv != null) {
         // get the runner id
@@ -30,9 +25,15 @@ function buildPlan(planData:string, options:any) {
         if (!activityType) {
             activityType = "run";
         }
+        // get the date for the activity
+        const timeElement = headingDiv.querySelector("div div.row div.spans8 div.details-container div.details time") as HTMLTimeElement;
+        const activityTime = new Date(timeElement.dateTime);
+        const storageKey = "TestTrainingPlan-" + activityTime.getTime() + "-" + activityType;
+        chrome.storage.local.get([storageKey]).then((planData) => {
+            console.log(planData);
+        });
 
         if (options.athleteId === Number(athleteId) && (options.activityTypes as string[]).indexOf(activityType.toLowerCase()) > -1) {
-            managePlanData(planData);
             const childHeadingDiv:ChildNode = headingDiv.childNodes[3];
             // PARENT DIV
             const newDiv:HTMLDivElement = document.createElement('div');
@@ -40,7 +41,6 @@ function buildPlan(planData:string, options:any) {
             newDiv.innerHTML = `<div class="no-margins row">
                 <header style="display: block;" class="inset">
                     <b>TRAINING PLAN:</b>
-                    ${planData}
                 </header>
                 <div class="inset">
                     <ul class="inline-stats section spans12">
