@@ -65,13 +65,12 @@ Nothing will happen on Strava until you have setup your options for your trainin
 
 ### Creating Training Plan
 Creating a training plan is fairly simple, and I have provided a very basic training plan for a single week that you can see [here](plans/sample.csv). Each entry for the training plan will be on a newline, and the csv will contain no headers and the following columns:
-1. ID - This is not currently used, but basically just a unique identifier for the entry.
-2. Date - A very specific date in the format YYYY-MM-DD. This will be used to match your entries in Strava.
-3. Activity Type - This is the type of activity, you will see the type on your Strava activity page next to your name. Generally if you are running it will just be "run", but the type of run can also be "race", "Long Run" or "Workout". It is not case sensitive so you don't need to worry about that, whatever you put there needs to match the activity type text on the activity page.
-4. Distance - This is the distance for the training. It doesn't really take into account any sort of unit of measurement. So whatever is defined in your options will define what say an entry of "5" means here. In the future will probably need to include unit of measurement so it can be converted as needed.
-5. Pace - Again does not take into account any sort of unit of measurement, so this will need to be updated in the future. However currently, if you set your options to miles it will show "mi". Most of the time someone will not switch between mi and km, so this would not be an issue.
-6. Title - This is just a nice title to give you training entry.
-7. Description - A nice description to explain what you are doing on this training day. Nice if you plan to do intervals or something like that. 
+1. Date - A very specific date in the format YYYY-MM-DD. This will be used to match your entries in Strava.
+2. Activity Type - This is the type of activity, you will see the type on your Strava activity page next to your name. Generally if you are running it will just be "run", but the type of run can also be "race", "Long Run" or "Workout". It is not case sensitive so you don't need to worry about that, whatever you put there needs to match the activity type text on the activity page.
+3. Distance - This is the distance for the training. It doesn't really take into account any sort of unit of measurement. So whatever is defined in your options will define what say an entry of "5" means here. In the future will probably need to include unit of measurement so it can be converted as needed.
+4. Pace - Again does not take into account any sort of unit of measurement, so this will need to be updated in the future. However currently, if you set your options to miles it will show "mi". Most of the time someone will not switch between mi and km, so this would not be an issue.
+5. Title - This is just a nice title to give you training entry.
+6. Description - A nice description to explain what you are doing on this training day. Nice if you plan to do intervals or something like that. 
 
 **NOTE** Please note, do not include any comma's in your description or title as it will break the CSV. I am not parsing it smartly and you can't even escape them. So for now just don't use them.
 

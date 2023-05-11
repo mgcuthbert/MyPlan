@@ -30,10 +30,10 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<void> {
     data.split(/\r?\n/).forEach((element:string) => {
         if (element && element.length > 0) {
             const planElements = element.split(",");
-            const entityDate = new Date(planElements[1] + "T00:00:00Z");
-            const entityType = planElements[2];
-            const distance = Number(planElements[3]);
-            const pace = planElements[4].split(":");
+            const entityDate = new Date(planElements[0] + "T00:00:00Z");
+            const entityType = planElements[1];
+            const distance = Number(planElements[2]);
+            const pace = planElements[3].split(":");
             const paceMinutes = Number(pace[0]);
             const paceSeconds = Number(pace[1]);
             const totalMinutes = distance * paceMinutes;
@@ -43,7 +43,6 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<void> {
             const finalMinutes = Math.trunc((totalMinutes + addedMinutes) % 60);
             const finalSeconds = Math.trunc(totalSeconds % 60);
             const newEntity = {
-                id: planElements[0],
                 date: entityDate,
                 distance: distance,
                 paceMinutes: paceMinutes,
@@ -52,8 +51,8 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<void> {
                 minutes: finalMinutes,
                 seconds: finalSeconds,
                 type: entityType,
-                title: planElements[5],
-                description: planElements[6]
+                title: planElements[4],
+                description: planElements[5]
             }
             const storageKey = entityDate.getTime() + '-' + entityType.toLowerCase();
             trainingMap[storageKey] = newEntity;

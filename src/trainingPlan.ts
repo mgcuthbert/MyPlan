@@ -28,52 +28,104 @@ function getIndividualStorageKey(headingDiv: HTMLElement) {
     return getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv).toLowerCase()
 }
 
-const updateDom = async (): Promise<void> => {
-    const headingDiv = document.getElementById('heading');
-    if (headingDiv != null) {
-        chrome.storage.local.get('planOptions', (options) => {
-            planOptions = options.planOptions;
-            chrome.storage.local.get([planOptions.planName], (planData) => {
-                if (planData && Date.now() - planData.tombstone < 86400000) {
-                    buildPlan(planData[planOptions.planName].data);
-                } else {
-                    chrome.runtime.sendMessage(planOptions.planName, handleResponse);
-                }
-            });
-        });
-    } else {
-        console.log("Heading Not Found, training plan could not be integrated!");
-    }
-};
-
 function handleResponse(status:string) {
     console.log(status);
-    const headingDiv = document.getElementById('heading');
-    if (headingDiv != null) {
-        chrome.storage.local.get([planOptions.planName], (planData) => {
-            if (planData) {
-                buildPlan(planData[planOptions.planName].data);
-            }
-        });
-    }
+    chrome.storage.local.get([planOptions.planName], (planData) => {
+        if (planData) {
+            buildPlan(planData[planOptions.planName].data);
+        }
+    });
 };
 
 function buildPlan(planData:any) {
-    console.log("Loading Training Plan...");
-    const headingDiv = document.getElementById('heading');
-    if (headingDiv != null && planData && planOptions.athleteId === Number(getAthleteId(headingDiv))) {
-        const dataKey = getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv);
-        const currentData = planData[dataKey];
-        let newUI:HTMLDivElement;
-        if (currentData) {
-            newUI = buildTraining(headingDiv, currentData);
-        } else {
-            newUI = buildNoTraining();
+    // check which page we are on and work based on that
+    if (location.href.match("activities")) {
+        console.log("Updating activities page...");
+        console.log("Loading Training Plan...");
+        const headingDiv = document.getElementById('heading');
+        if (headingDiv != null && planData && planOptions.athleteId === Number(getAthleteId(headingDiv))) {
+            const dataKey = getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv);
+            const currentData = planData[dataKey];
+            let newUI:HTMLDivElement;
+            if (currentData) {
+                newUI = buildTraining(headingDiv, currentData);
+            } else {
+                newUI = buildNoTraining();
+            }
+            const childHeadingDiv:ChildNode = headingDiv.childNodes[3];
+            childHeadingDiv.appendChild(newUI);
         }
-        const childHeadingDiv:ChildNode = headingDiv.childNodes[3];
-        childHeadingDiv.appendChild(newUI);
+    } else if (location.href.match("dashboard")) {
+        console.log("Updating dashboard page...");
+        buildComingUp(planData);
     }
 };
+
+function buildComingUp(planData:any) {
+    const feedDiv = document.getElementById('dashboard-feed');
+    if (feedDiv) {
+        const newDiv:HTMLDivElement = document.createElement('div');
+        newDiv.className = "card";
+        newDiv.innerHTML = `
+            <div class="card-body text-center">
+                <div class="card-section">
+                    <h2 class="text-title2 mt-sm mb-md">
+                        Upcoming Training.
+                    </h2>
+                </div>
+                <div class="card-section">
+                    <ul class="list-stats text-center">
+                        <li>
+                            <div class="stat">
+                                <div class="stat-subtext">Day</div>
+                                <b class="stat-text">Friday</b>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="stat">
+                                <div class="stat-subtext">Distance</div>
+                                <b class="stat-text">8</b>
+                            <div class="stat">
+                        </li>
+                        <li>
+                            <div class="stat">
+                                <div class="stat-subtext">Pace</div>
+                                <b class="stat-text">8:30 / mi</b>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-section">
+                    <ul class="list-stats text-center">
+                        <li>
+                            <div class="stat">
+                                <div class="stat-subtext">Day</div>
+                                <b class="stat-text">Saturday</b>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="stat">
+                                <div class="stat-subtext">Distance</div>
+                                <b class="stat-text">5</b>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="stat">
+                                <div class="stat-subtext">Pace</div>
+                                <b class="stat-text">10:30 / mi</b>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    Upcoming totals go here.
+                </div>
+            </div>
+        `;
+        newDiv.style["marginTop"] = "20px";
+        feedDiv.insertBefore(newDiv, feedDiv.firstChild);
+    }
+}
 
 function buildNoTraining(): HTMLDivElement {
     const newDiv:HTMLDivElement = document.createElement('div');
@@ -154,6 +206,19 @@ function buildTraining(headingDiv:HTMLElement, currentData:any): HTMLDivElement 
     `;
 
     return newDiv;
-}
+};
+
+const updateDom = async (): Promise<void> => {
+    chrome.storage.local.get('planOptions', (options) => {
+        planOptions = options.planOptions;
+        chrome.storage.local.get([planOptions.planName], (planData) => {
+            if (planData && Date.now() - planData.tombstone < 86400000) {
+                buildPlan(planData[planOptions.planName].data);
+            } else {
+                chrome.runtime.sendMessage(planOptions.planName, handleResponse);
+            }
+        });
+    });
+};
 
 updateDom();
