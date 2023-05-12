@@ -68,9 +68,8 @@ function buildComingUp(planData:any) {
         newDiv.className = "card";
         const filteredKeys = Object.keys(planData).filter((dateKey:string) => {
             const millis = dateKey.split("-")[0];
-            console.log(millis + "-" + Date.now() + 6.048e+8);
-            return Number(millis) < Date.now() + 6.048e+8;
-        });
+            return Number(millis) > Date.now() && Number(millis) <= Date.now() + 6.048e+8;
+        }).sort();
         if (filteredKeys.length === 0) {
             newDiv.innerHTML = `
             <div class="card-body text-center">
@@ -93,19 +92,19 @@ function buildComingUp(planData:any) {
             let totalDistance = 0;
             filteredKeys.forEach((key:any) => {
                 const currentPlan = planData[key];
-                console.log(planData[key]);
                 let paceSeconds = currentPlan.paceSeconds;
                 if (paceSeconds < 10) {
                     paceSeconds = "0" + paceSeconds;
                 }
                 totalDistance += currentPlan.distance;
+                const currentDate = new Date(currentPlan.date);
                 innerHTML += `
                     <div class="card-section">
                         <ul class="list-stats text-center">
                             <li>
                                 <div class="stat">
                                     <div class="stat-subtext text-left">Day</div>
-                                    <b class="stat-text">Friday</b>
+                                    <b class="stat-text">${currentDate.toLocaleDateString("en-US", { weekday: 'long'})}</b>
                                 </div>
                             </li>
                             <li>

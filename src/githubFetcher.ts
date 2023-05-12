@@ -43,7 +43,7 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<void> {
             const finalMinutes = Math.trunc((totalMinutes + addedMinutes) % 60);
             const finalSeconds = Math.trunc(totalSeconds % 60);
             const newEntity = {
-                date: entityDate,
+                date: entityDate.getTime(),
                 distance: distance,
                 paceMinutes: paceMinutes,
                 paceSeconds: paceSeconds,
