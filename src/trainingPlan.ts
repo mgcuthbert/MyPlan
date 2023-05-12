@@ -102,6 +102,11 @@ function buildComingUp(planData:any) {
                     <div class="card-section">
                         <ul class="list-stats text-left">
                             <li>
+                                <div>
+                                    <b>${currentPlan.title}</b>
+                                </div>
+                            </li>
+                            <li>
                                 <div class="stat">
                                     <div class="stat-subtext text-left"><b>Day</b></div>
                                     <b class="stat-subtext">${currentDate.toLocaleDateString("en-US", { weekday: 'long'})}</b>

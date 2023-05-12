@@ -5,6 +5,7 @@ A chrome Plugin that integrates a training plan into the Strava website. This tr
 
 ### Activity Page
 ![Activity Page](docs/images/activitypage.jpg)
+
 The activity page shows the basic information for the training matching the expected training for that day. It includes:
 - A title that is supplied in the plan.
 - A description of the plan display on the right next to the stats.
@@ -15,15 +16,24 @@ The activity page shows the basic information for the training matching the expe
 
 ### Options
 ![Options Page](docs/images/options.jpg)
+
 The options page allows for some very basic options, however primarily used to point to the CSV file accessible online. I store the file on Github just because, but the file could technically be stored at any location that can be accessed from your browser. Here are the options:
 - Plan Name - It is not super important what you put here, and if you don't put anything it will use a default plan name. This option is only useful if you have a caching issue and it is not picking up changes you made to your training plan.
 - The URL location of the CSV training plan, I store my data in Github as it is just easier for me, but any accessible path for your browser would be allowed.
 - AthleteId - This is your Strava AthleteId, the only thing this is used for is simply to only enable the training plan on your own activities and make sure it doesn't show up when you look at other peoples activities. Your AthleteId is never stored anywhere else or sent outside of your browser.
 - Measurements - This allows you to select your preferred unit of measurement, either miles or kilometers. This will be removed eventually and will be pulled directly from the activity itself. It defaults to miles (I am American), so if you live just about anywhere else, you probably want to make sure to change this.
 
+### Activity Feed Upcoming Training
+![dashboard_upcoming.jpg](docs/images/dashboard_upcoming.jpg)
+
+The upcoming training in the activity includes training that is coming up in the next week, listing them with the following information:
+- The day of the week the training will take place.
+- The distance of the training.
+- The expected pace for the training.
+- The provided description of the training.
+
 ## Future Features
 The future features will include the following:
-- An upcoming list of activities for the week at the top of your activity feed.
 - Integration in the My Activities page to include training data on all the activities listed.
 - A calendar popout from the My Activities page to show your training plan fully.
 - Multiple plans with date ranges, so that the plans are only active during those date ranges.
