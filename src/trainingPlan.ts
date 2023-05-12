@@ -66,62 +66,72 @@ function buildComingUp(planData:any) {
     if (feedDiv) {
         const newDiv:HTMLDivElement = document.createElement('div');
         newDiv.className = "card";
-        newDiv.innerHTML = `
+        const filteredKeys = Object.keys(planData).filter((dateKey:string) => {
+            const millis = dateKey.split("-")[0];
+            console.log(millis + "-" + Date.now() + 6.048e+8);
+            return Number(millis) < Date.now() + 6.048e+8;
+        });
+        if (filteredKeys.length === 0) {
+            newDiv.innerHTML = `
             <div class="card-body text-center">
                 <div class="card-section">
                     <h2 class="text-title2 mt-sm mb-md">
                         Upcoming Training.
                     </h2>
-                </div>
-                <div class="card-section">
-                    <ul class="list-stats text-center">
-                        <li>
-                            <div class="stat">
-                                <div class="stat-subtext">Day</div>
-                                <b class="stat-text">Friday</b>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stat">
-                                <div class="stat-subtext">Distance</div>
-                                <b class="stat-text">8</b>
-                            <div class="stat">
-                        </li>
-                        <li>
-                            <div class="stat">
-                                <div class="stat-subtext">Pace</div>
-                                <b class="stat-text">8:30 / mi</b>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-section">
-                    <ul class="list-stats text-center">
-                        <li>
-                            <div class="stat">
-                                <div class="stat-subtext">Day</div>
-                                <b class="stat-text">Saturday</b>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stat">
-                                <div class="stat-subtext">Distance</div>
-                                <b class="stat-text">5</b>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stat">
-                                <div class="stat-subtext">Pace</div>
-                                <b class="stat-text">10:30 / mi</b>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-footer">
-                    Upcoming totals go here.
-                </div>
+                </div>    
             </div>
-        `;
+            `;
+        } else {
+            let innerHTML = `
+                <div class="card-body text-left">
+                    <div class="card-section">
+                        <h2 class="text-title2 mt-sm mb-md">
+                            Upcoming Training.
+                        </h2>
+                    </div>
+            `;
+            let totalDistance = 0;
+            filteredKeys.forEach((key:any) => {
+                const currentPlan = planData[key];
+                console.log(planData[key]);
+                let paceSeconds = currentPlan.paceSeconds;
+                if (paceSeconds < 10) {
+                    paceSeconds = "0" + paceSeconds;
+                }
+                totalDistance += currentPlan.distance;
+                innerHTML += `
+                    <div class="card-section">
+                        <ul class="list-stats text-center">
+                            <li>
+                                <div class="stat">
+                                    <div class="stat-subtext text-left">Day</div>
+                                    <b class="stat-text">Friday</b>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="stat">
+                                    <div class="stat-subtext text-left">Distance</div>
+                                    <b class="stat-text">${currentPlan.distance}</b>
+                                <div class="stat">
+                            </li>
+                            <li>
+                                <div class="stat">
+                                    <div class="stat-subtext text-left">Pace</div>
+                                    <b class="stat-text">${currentPlan.paceMinutes + ":" + paceSeconds} / mi</b>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                `;
+            });
+            innerHTML += `
+                    <div class="card-footer text-right">
+                        A total of <b>${totalDistance}</b> miles planed for the next 7 days.    
+                    </div>
+                </div>
+            `;
+            newDiv.innerHTML = innerHTML;
+        }
         newDiv.style["marginTop"] = "20px";
         feedDiv.insertBefore(newDiv, feedDiv.firstChild);
     }
