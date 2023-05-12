@@ -72,7 +72,7 @@ function buildComingUp(planData:any) {
         }).sort();
         if (filteredKeys.length === 0) {
             newDiv.innerHTML = `
-            <div class="card-body text-center">
+            <div class="card-body text-left">
                 <div class="card-section">
                     <h2 class="text-title2 mt-sm mb-md">
                         Upcoming Training.
@@ -100,23 +100,29 @@ function buildComingUp(planData:any) {
                 const currentDate = new Date(currentPlan.date);
                 innerHTML += `
                     <div class="card-section">
-                        <ul class="list-stats text-center">
+                        <ul class="list-stats text-left">
                             <li>
                                 <div class="stat">
-                                    <div class="stat-subtext text-left">Day</div>
-                                    <b class="stat-text">${currentDate.toLocaleDateString("en-US", { weekday: 'long'})}</b>
+                                    <div class="stat-subtext text-left"><b>Day</b></div>
+                                    <b class="stat-subtext">${currentDate.toLocaleDateString("en-US", { weekday: 'long'})}</b>
                                 </div>
                             </li>
                             <li>
                                 <div class="stat">
-                                    <div class="stat-subtext text-left">Distance</div>
-                                    <b class="stat-text">${currentPlan.distance}</b>
+                                    <div class="stat-subtext text-left"><b>Distance</b></div>
+                                    <b class="stat-subtext">${currentPlan.distance}</b>
                                 <div class="stat">
                             </li>
                             <li>
                                 <div class="stat">
-                                    <div class="stat-subtext text-left">Pace</div>
-                                    <b class="stat-text">${currentPlan.paceMinutes + ":" + paceSeconds} / mi</b>
+                                    <div class="stat-subtext text-left"><b>Pace</b></div>
+                                    <b class="stat-subtext">${currentPlan.paceMinutes + ":" + paceSeconds} / mi</b>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="stat">
+                                    <div class="stat-subtext text-left"><b>Description</b></div>
+                                    <b class="stat-subtext">${currentPlan.description}</b>
                                 </div>
                             </li>
                         </ul>
