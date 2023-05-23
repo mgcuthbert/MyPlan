@@ -1,3 +1,5 @@
+[![Release](https://github.com/mgcuthbert/StravaTrainingPlan/actions/workflows/release.yml/badge.svg)](https://github.com/mgcuthbert/StravaTrainingPlan/actions/workflows/release.yml)
+
 # TrainingPlan
 A chrome Plugin that integrates a training plan into the Strava website. This training plan would primarily be for running as that is my primary sport. However could probably be used for sports that have similar kind of stats, like cycling. However because I do not really track these kinds of sports I am not certain at the usefulness of it.
 
