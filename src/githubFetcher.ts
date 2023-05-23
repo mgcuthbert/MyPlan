@@ -27,10 +27,18 @@ chrome.runtime.onMessage.addListener((planName, sender, sendResponse) => {
 function updateLocalStorageWithPlan(planName:string, data:any): Promise<void> {
     // Create a map of all the training entries, and then cache it based on the plan name
     const trainingMap: Record<string,any> = {};
+    var startTraining: Date = new Date(0);
+    var endTraining: Date = new Date(0); 
     data.split(/\r?\n/).forEach((element:string) => {
         if (element && element.length > 0) {
             const planElements = element.split(",");
             const entityDate = new Date(planElements[0] + "T00:00:00Z");
+            if (startTraining.getTime() === 0 || startTraining.getTime() > entityDate.getTime()) {
+                startTraining = entityDate;
+            }
+            if (endTraining.getTime() === 0 || endTraining.getTime() < entityDate.getTime()) {
+                endTraining = entityDate;
+            }
             const entityType = planElements[1];
             const distance = Number(planElements[2]);
             const pace = planElements[3].split(":");
@@ -58,5 +66,10 @@ function updateLocalStorageWithPlan(planName:string, data:any): Promise<void> {
             trainingMap[storageKey] = newEntity;
         }
     });
-    return chrome.storage.local.set({[planName]: { data: trainingMap, tombstone: Date.now() }});
+    return chrome.storage.local.set({[planName]: { 
+        data: trainingMap, 
+        tombstone: Date.now(), 
+        startTraing: startTraining.getTime(), 
+        endTraining: endTraining.getTime() 
+    }});
 }

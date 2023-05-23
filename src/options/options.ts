@@ -23,6 +23,10 @@ miRadio.addEventListener('change', () => saveOptions());
 const kmRadio = document.getElementById('km') as HTMLInputElement;
 kmRadio.addEventListener('change', () => saveOptions());
 
+// CACHE KEY
+const cacheKey = document.getElementById('cachekey') as HTMLInputElement;
+cacheKey.addEventListener('change', () => saveOptions());
+
 function saveOptions() {
   let actualPlanName = planName.value;
   if (actualPlanName === undefined || actualPlanName.length === 0) {
@@ -35,6 +39,7 @@ function saveOptions() {
     planURL: planURL.value,
     useMi: miRadio.checked,
   };
+  chrome.storage.local.clear();
   chrome.storage.local.set({ planOptions: currentOptions });
 }
 

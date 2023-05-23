@@ -1,6 +1,7 @@
 // Some globals - yeah I know you no one likes globals.
 // I am not trying to win any awards for clean code here.
 let planOptions:any = undefined;
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 function getPageTime(headingDiv: HTMLElement): Date {
     const timeElement = headingDiv.querySelector("div div.row div.spans8 div.details-container div.details time") as HTMLTimeElement;
@@ -32,51 +33,59 @@ function handleResponse(status:string) {
     console.log(status);
     chrome.storage.local.get([planOptions.planName], (planData) => {
         if (planData) {
-            buildPlan(planData[planOptions.planName].data);
+            buildPlan(planOptions.planName, planData[planOptions.planName]);
         }
     });
 };
 
-function buildPlan(planData:any) {
+function buildPlan(planName:string, planData:any) {
     // check which page we are on and work based on that
     if (location.href.match("activities")) {
         console.log("Updating activities page...");
         console.log("Loading Training Plan...");
         const headingDiv = document.getElementById('heading');
-        if (headingDiv != null && planData && planOptions.athleteId === Number(getAthleteId(headingDiv))) {
-            const dataKey = getPageTime(headingDiv).getTime() + "-" + getPageActivityType(headingDiv);
-            const currentData = planData[dataKey];
+        if (headingDiv != null && planData.data && planOptions.athleteId === Number(getAthleteId(headingDiv))) {
+            const pageTime = getPageTime(headingDiv).getTime();
+            const dataKey = pageTime + "-" + getPageActivityType(headingDiv);
+            const currentData = planData.data[dataKey];
             let newUI:HTMLDivElement;
             if (currentData) {
-                newUI = buildTraining(headingDiv, currentData);
-            } else {
+                newUI = buildTraining(planName, headingDiv, currentData);
+            } else if (planData.startTraing.getTime() <= pageTime && planData.endTraining >= pageTime) {
                 newUI = buildNoTraining();
+            } else {
+                return;
             }
             const childHeadingDiv:ChildNode = headingDiv.childNodes[3];
             childHeadingDiv.appendChild(newUI);
         }
     } else if (location.href.match("dashboard")) {
         console.log("Updating dashboard page...");
-        buildComingUp(planData);
+        buildComingUp(planName, planData);
     }
 };
 
-function buildComingUp(planData:any) {
+function buildComingUp(planName:string, planData:any) {
     const feedDiv = document.getElementById('dashboard-feed');
     if (feedDiv) {
         const newDiv:HTMLDivElement = document.createElement('div');
         newDiv.className = "card";
-        const filteredKeys = Object.keys(planData).filter((dateKey:string) => {
+        console.log(planData);
+        const filteredKeys = Object.keys(planData.data).filter((dateKey:string) => {
             const millis = dateKey.split("-")[0];
             return Number(millis) > Date.now() && Number(millis) <= Date.now() + 6.048e+8;
         }).sort();
         if (filteredKeys.length === 0) {
+            var daysBetween = planData.startTraing - new Date().getTime();
+            daysBetween = Math.floor(daysBetween / (1000*60*60*24));
             newDiv.innerHTML = `
             <div class="card-body text-left">
                 <div class="card-section">
                     <h2 class="text-title2 mt-sm mb-md">
-                        Upcoming Training.
+                        ${planName}
                     </h2>
+                    Training starting in <b>${daysBetween}</b> days: <br/>
+                    <b>${new Date(planData.startTraing).toDateString()}</b> through <b>${new Date(planData.endTraining).toDateString()}</b>
                 </div>    
             </div>
             `;
@@ -85,8 +94,9 @@ function buildComingUp(planData:any) {
                 <div class="card-body text-left">
                     <div class="card-section">
                         <h2 class="text-title2 mt-sm mb-md">
-                            Upcoming Training.
+                            ${planName}
                         </h2>
+                        Training for the next week.
                     </div>
             `;
             let totalDistance = 0;
@@ -159,7 +169,7 @@ function buildNoTraining(): HTMLDivElement {
     return newDiv;
 };
 
-function buildTraining(headingDiv:HTMLElement, currentData:any): HTMLDivElement {
+function buildTraining(planName:string, headingDiv:HTMLElement, currentData:any): HTMLDivElement {
     const newDiv:HTMLDivElement = document.createElement('div');
 
     let unit = "kilometer";
@@ -233,7 +243,7 @@ const updateDom = async (): Promise<void> => {
         planOptions = options.planOptions;
         chrome.storage.local.get([planOptions.planName], (planData) => {
             if (planData && Date.now() - planData.tombstone < 86400000) {
-                buildPlan(planData[planOptions.planName].data);
+                buildPlan(planOptions.planName, planData[planOptions.planName]);
             } else {
                 chrome.runtime.sendMessage(planOptions.planName, handleResponse);
             }
