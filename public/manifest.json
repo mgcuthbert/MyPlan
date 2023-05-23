@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Strava Training Plan",
+    "name": "My Plan",
     "version": "0.1.0",
     "description": "Customization of Strava to include training plan.",
     "icons": {
