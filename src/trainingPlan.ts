@@ -101,7 +101,7 @@ function buildComingUp(planName:string, planData:any) {
             `;
             let totalDistance = 0;
             filteredKeys.forEach((key:any) => {
-                const currentPlan = planData[key];
+                const currentPlan = planData.data[key];
                 let paceSeconds = currentPlan.paceSeconds;
                 if (paceSeconds < 10) {
                     paceSeconds = "0" + paceSeconds;
@@ -114,6 +114,12 @@ function buildComingUp(planName:string, planData:any) {
                             <li>
                                 <div>
                                     <b>${currentPlan.title}</b>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="stat">
+                                    <div class="stat-subtext text-left"><b>Date</b></div>
+                                    <b class="stat-subtext">${currentDate.toLocaleDateString("en-US")}</b>
                                 </div>
                             </li>
                             <li>
@@ -134,9 +140,10 @@ function buildComingUp(planName:string, planData:any) {
                                     <b class="stat-subtext">${currentPlan.paceMinutes + ":" + paceSeconds} / mi</b>
                                 </div>
                             </li>
+                        </ul>
+                        <ul>
                             <li>
                                 <div class="stat">
-                                    <div class="stat-subtext text-left"><b>Description</b></div>
                                     <b class="stat-subtext">${currentPlan.description}</b>
                                 </div>
                             </li>
