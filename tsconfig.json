@@ -3,11 +3,12 @@
         "strict": true,
         "module": "commonjs",
         "target": "es2016",
+        "moduleResolution": "classic",
         "esModuleInterop": true,
         "sourceMap": true,
         "rootDir": "src",
         "outDir": "dist/js",
         "noEmitOnError": true,
-        "typeRoots": ["node_modules/@types"]
+        "typeRoots": ["node_modules/@types"],
     }
 }

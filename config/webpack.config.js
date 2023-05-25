@@ -10,7 +10,11 @@ const config = (env, argv) =>
     merge(common, {
         entry: {
             options: PATHS.src + '/options/options.ts',
-            trainingPlan: PATHS.src + '/trainingPlan.ts',
+            myPlan: [
+                PATHS.src + '/extension/loadMyPlan.ts', 
+                PATHS.src + '/extension/views/calendarView.ts',
+                PATHS.src + '/extension/views/activityView.ts',
+                PATHS.src + '/extension/views/dashboardView.ts'],
             githubFetcher: PATHS.src + '/githubFetcher.ts'
         },
         devtool: argv.mode === 'production' ? false : 'source-map',

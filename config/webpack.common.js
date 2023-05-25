@@ -20,7 +20,7 @@ const common = {
     filename: '[name].js',
   },
   stats: {
-    all: false,
+    all: true,
     errors: true,
     builtAt: true,
     assets: true,

@@ -1,12 +1,13 @@
 {
-    "name": "TrainingPlan",
-    "version": "0.1.0",
+    "name": "MyPlan",
+    "version": "0.4.0",
     "description": "Customization of Strava to include training plan.",
     "private": true,
     "scripts": {
         "watch": "webpack --mode=development --watch --config config/webpack.config.js",
         "build": "webpack --mode=production --config config/webpack.config.js",
-        "zip": "npm run build && zip -r 'build.'$npm_package_version'.zip' build && mv 'build.'$npm_package_version'.zip' zips",
+        "zip": "npm run build && zip -r 'build.'$version'.zip' build && mv 'build.'$version'.zip' dist",
+        "gzip": "npm run build && tar -cvzf MyPlan.'$version'.tar.gz build && mv MyPlan.'$version'.tar.gz dist",
         "prettier": "prettier",
         "prettier:check": "prettier --check src/**/*{.ts,.css,.html} public/**/*{.ts,.css,.html} --no-error-on-unmatched-pattern",
         "prettier:fix": "prettier --write src/**/*{.ts,.css,.html} public/**/*{.ts,.css,.html} --no-error-on-unmatched-pattern",
