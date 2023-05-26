@@ -5,7 +5,6 @@ import { buildDashboardView } from "./views/dashboardView";
 // Some globals - yeah I know you no one likes globals.
 // I am not trying to win any awards for clean code here.
 let planOptions:any = undefined;
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 function buildPlan(planName:string, planData:any) {
     // check which page we are on and work based on that
@@ -17,7 +16,7 @@ function buildPlan(planName:string, planData:any) {
         buildDashboardView(planName, planData);
     } else if (location.href.match("calendar")) {
         console.log("Updating calendar page...");
-        buildCalendarView();
+        buildCalendarView(planName, planData);
     }
 };
 
