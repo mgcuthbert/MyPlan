@@ -49,7 +49,7 @@ export function buildActivityView(planData:any, planOptions:any) {
                 buffer = planOptions.paceBuffer;
             }
             newUI = updateView(headingDiv, currentData, planOptions.useMi, buffer);
-        } else if (planData.startTraing.getTime() <= pageTime && planData.endTraining >= pageTime) {
+        } else if (planData.startTraing <= pageTime && planData.endTraining >= pageTime) {
             newUI = buildNoTraining();
         } else {
             return;
