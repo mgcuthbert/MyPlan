@@ -44,7 +44,7 @@ export function buildActivityView(planData:any, planOptions:any) {
         const currentData = planData.data[dataKey];
         let newUI:HTMLDivElement;
         if (currentData) {
-            newUI = updateView(headingDiv, currentData, planOptions.useMi);
+            newUI = updateView(headingDiv, currentData, planOptions.useMi, planOptions.paceBuffer);
         } else if (planData.startTraing.getTime() <= pageTime && planData.endTraining >= pageTime) {
             newUI = buildNoTraining();
         } else {
@@ -55,7 +55,7 @@ export function buildActivityView(planData:any, planOptions:any) {
     }
 }
 
-function updateView(headingDiv:HTMLElement, currentData:any, useMi:boolean=true): HTMLDivElement {
+function updateView(headingDiv:HTMLElement, currentData:any, useMi:boolean=true, paceBuffer:number): HTMLDivElement {
     const newDiv:HTMLDivElement = document.createElement('div');
 
     let unit = "kilometer";
@@ -80,7 +80,7 @@ function updateView(headingDiv:HTMLElement, currentData:any, useMi:boolean=true)
     let paceDifferenceMinutes = Math.floor(Math.abs(paceDifferenceInSeconds / 60));
     let paceDifferenceSeconds = Math.floor(Math.abs(paceDifferenceInSeconds % 60));
     let paceColor = 'green';
-    if (paceDifferenceInSeconds < 0) {
+    if (Math.abs(paceDifferenceInSeconds) < paceBuffer) {
         paceColor = 'red';
     }
 

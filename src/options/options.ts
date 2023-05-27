@@ -21,6 +21,10 @@ athleteId?.addEventListener('change', () => saveOptions());
 const planGoal = document.getElementById('planGoal') as HTMLInputElement;
 planGoal?.addEventListener('change', () => saveOptions());
 
+// PACE BUFFER
+const paceBuffer = document.getElementById('paceBuffer') as HTMLInputElement;
+paceBuffer?.addEventListener('change', () => saveOptions());
+
 // MEASUREMENTS
 const miRadio = document.getElementById('mi') as HTMLInputElement;
 miRadio.addEventListener('change', () => saveOptions());
@@ -42,6 +46,7 @@ function saveOptions() {
     planName: actualPlanName,
     planURL: planURL.value,
     planGoal: planGoal.value,
+    paceBuffer: paceBuffer.value,
     useMi: miRadio.checked,
   };
   chrome.storage.local.clear();
