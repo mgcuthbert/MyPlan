@@ -1,4 +1,4 @@
-export function buildDashboardView(planName:string, planData:any) {
+export function buildDashboardView(planName:string, planData:any, planGoal:string) {
     const feedDiv = document.getElementById('dashboard-feed');
     if (feedDiv) {
         const newDiv:HTMLDivElement = document.createElement('div');
@@ -7,6 +7,17 @@ export function buildDashboardView(planName:string, planData:any) {
             const millis = dateKey.split("-")[0];
             return Number(millis) > Date.now() && Number(millis) <= Date.now() + 6.048e+8;
         }).sort();
+
+        // plan goal
+        let pg = "";
+        if (planGoal !== undefined && planGoal.length > 0) {
+            pg = `
+                <div class="text-label text-small mb-8px">
+                    <b>Goal:</b> ${planGoal}
+                </div>
+            `;
+        }
+
         if (filteredKeys.length === 0) {
             var daysBetween = planData.startTraing - new Date().getTime();
             daysBetween = Math.floor(daysBetween / (1000*60*60*24));
@@ -16,6 +27,7 @@ export function buildDashboardView(planName:string, planData:any) {
                     <h2 class="text-title2 mt-sm mb-md">
                         ${planName}
                     </h2>
+                    ${pg}
                     Training starting in <b>${daysBetween}</b> days: <br/>
                     <b>${new Date(planData.startTraing).toDateString()}</b> through <b>${new Date(planData.endTraining).toDateString()}</b>
                 </div>    
@@ -28,6 +40,7 @@ export function buildDashboardView(planName:string, planData:any) {
                         <h2 class="text-title2 mt-sm mb-md">
                             ${planName}
                         </h2>
+                        ${pg}
                         Training for the next week.
                     </div>
             `;

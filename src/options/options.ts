@@ -17,6 +17,10 @@ planURL?.addEventListener('change', () => saveOptions());
 const athleteId = document.getElementById('athleteId') as HTMLInputElement;
 athleteId?.addEventListener('change', () => saveOptions());
 
+// PLAN GOAL
+const planGoal = document.getElementById('planGoal') as HTMLInputElement;
+planGoal?.addEventListener('change', () => saveOptions());
+
 // MEASUREMENTS
 const miRadio = document.getElementById('mi') as HTMLInputElement;
 miRadio.addEventListener('change', () => saveOptions());
@@ -37,6 +41,7 @@ function saveOptions() {
     athleteId: Number(athleteId.value),
     planName: actualPlanName,
     planURL: planURL.value,
+    planGoal: planGoal.value,
     useMi: miRadio.checked,
   };
   chrome.storage.local.clear();

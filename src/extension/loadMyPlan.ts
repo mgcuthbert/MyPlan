@@ -13,10 +13,10 @@ function buildPlan(planName:string, planData:any) {
         buildActivityView(planData, planOptions);
     } else if (location.href.match("dashboard")) {
         console.log("Updating dashboard page...");
-        buildDashboardView(planName, planData);
+        buildDashboardView(planName, planData, planOptions.planGoal);
     } else if (location.href.match("calendar")) {
         console.log("Updating calendar page...");
-        buildCalendarView(planName, planData);
+        buildCalendarView(planName, planData, planOptions.useMi, planOptions.planGoal);
     }
 };
 
