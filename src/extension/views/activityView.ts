@@ -44,7 +44,11 @@ export function buildActivityView(planData:any, planOptions:any) {
         const currentData = planData.data[dataKey];
         let newUI:HTMLDivElement;
         if (currentData) {
-            newUI = updateView(headingDiv, currentData, planOptions.useMi, planOptions.paceBuffer);
+            let buffer = 10;
+            if (planOptions.paceBuffer) {
+                buffer = planOptions.paceBuffer;
+            }
+            newUI = updateView(headingDiv, currentData, planOptions.useMi, buffer);
         } else if (planData.startTraing.getTime() <= pageTime && planData.endTraining >= pageTime) {
             newUI = buildNoTraining();
         } else {
@@ -80,7 +84,7 @@ function updateView(headingDiv:HTMLElement, currentData:any, useMi:boolean=true,
     let paceDifferenceMinutes = Math.floor(Math.abs(paceDifferenceInSeconds / 60));
     let paceDifferenceSeconds = Math.floor(Math.abs(paceDifferenceInSeconds % 60));
     let paceColor = 'green';
-    if (Math.abs(paceDifferenceInSeconds) < paceBuffer) {
+    if (Math.abs(paceDifferenceInSeconds) > paceBuffer) {
         paceColor = 'red';
     }
 

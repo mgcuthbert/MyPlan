@@ -68,6 +68,14 @@ chrome.storage.local.get(['planOptions']).then((options) => {
       athleteId.value = currentOptions.athleteId;
     }
 
+    if (currentOptions.planGoal) {
+      planGoal.value = currentOptions.planGoal;
+    }
+
+    if (currentOptions.paceBuffer) {
+      paceBuffer.value = currentOptions.paceBuffer;
+    }
+
     if (currentOptions.useMi) {
       miRadio.checked = true;
     } else {
