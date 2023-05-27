@@ -38,11 +38,15 @@ export function buildCalendarView(planName:string, planData:any, useMi:boolean, 
 };
 
 function addNextPreviousEventListener(header:HTMLElement, planName:string, planData:any, useMi:boolean, planGoal:string) {
-    const nextButton = header.querySelector("h2.heading-nav span.active a.nav-arrow-icon.next") as HTMLElement;
-    nextButton.addEventListener('click', () => buildCalendarView(planName, planData, useMi, planGoal));
+    // Can't get this piece of code work correctly, and don't feel like troubleshooting it.
+    // so for now you have to refresh your page if you want to see everything on the calendar.
+    /*const nextButton = header.querySelector("h2.heading-nav span.active a.nav-arrow-icon.next") as HTMLElement;
+    nextButton.removeEventListener('mousedown', () => buildCalendarView(planName, planData, useMi, planGoal));
+    nextButton.addEventListener('mousedown', () => buildCalendarView(planName, planData, useMi, planGoal));
 
     const prevButton = header.querySelector("h2.heading-nav span.active a.nav-arrow-icon.prev") as HTMLElement;
-    prevButton.addEventListener('click', () => buildCalendarView(planName, planData, useMi, planGoal));
+    prevButton.removeEventListener('mousedown', () => buildCalendarView(planName, planData, useMi, planGoal));
+    prevButton.addEventListener('mousedown', () => buildCalendarView(planName, planData, useMi, planGoal));*/
 }
 
 function addGoal(planGoal:string) {
