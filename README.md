@@ -38,11 +38,14 @@ The upcoming training in the activity includes training that is coming up in the
 
 If the date range for the training plan is too far out, it will simply state that there is no upcoming training but your plan will start in X days.
 
+### Calendar View
+![calendarview.jpg](docs/images/calendarview.jpg)
+
+The Calendar view will show you your training schedule for the month, showing each days training with the title, distance and pace.
+
 ## Future Features
 The future features will include the following:
-- Integration into Training Calendar, so that when you look at an individual month you can see the training plan alongside your training.
 - Integration in the My Activities page to include training data on all the activities listed.
-- A calendar popout from the My Activities page to show your training plan fully.
 - Allow for multiple activities on a single day. Currently you can kind of do that as long as the activities are all of a different discipline. So you can run and then cycle on a single day as part of your plan, but you can't run twice.
 - Integration into Premium Strava features like Training Log.
 
