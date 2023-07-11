@@ -1,11 +1,18 @@
 export function buildDashboardView(planName:string, planData:any, planGoal:string) {
+    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const feedDiv = document.getElementById('dashboard-feed');
     if (feedDiv) {
         const newDiv:HTMLDivElement = document.createElement('div');
         newDiv.className = "card";
         const filteredKeys = Object.keys(planData.data).filter((dateKey:string) => {
             const millis = dateKey.split("-")[0];
-            return Number(millis) > Date.now() && Number(millis) <= Date.now() + 6.048e+8;
+            const current = new Date(Date.now());
+            current.setUTCHours(0);
+            current.setUTCMinutes(0);
+            current.setUTCMinutes(0);
+            current.setUTCSeconds(0);
+            current.setUTCMilliseconds(0);
+            return Number(millis) >= current.getTime() && Number(millis) <= current.getTime() + 6.048e+8;
         }).sort();
 
         // plan goal
@@ -30,7 +37,7 @@ export function buildDashboardView(planName:string, planData:any, planGoal:strin
                     ${pg}
                     Training starting in <b>${daysBetween}</b> days: <br/>
                     <b>${new Date(planData.startTraing).toDateString()}</b> through <b>${new Date(planData.endTraining).toDateString()}</b>
-                </div>    
+                </div>
             </div>
             `;
         } else {
@@ -64,13 +71,13 @@ export function buildDashboardView(planName:string, planData:any, planGoal:strin
                             <li>
                                 <div class="stat">
                                     <div class="stat-subtext text-left"><b>Date</b></div>
-                                    <b class="stat-subtext">${currentDate.toLocaleDateString("en-US")}</b>
+                                    <b class="stat-subtext">${currentDate.toISOString().substring(0, 10)}</b>
                                 </div>
                             </li>
                             <li>
                                 <div class="stat">
                                     <div class="stat-subtext text-left"><b>Day</b></div>
-                                    <b class="stat-subtext">${currentDate.toLocaleDateString("en-US", { weekday: 'long'})}</b>
+                                    <b class="stat-subtext">${weekday[currentDate.getUTCDay()]}</b>
                                 </div>
                             </li>
                             <li>
